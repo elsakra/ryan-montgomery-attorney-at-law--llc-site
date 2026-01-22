@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import siteData from '../../data/site.json';
+import { getCollection } from 'astro:content';
+
+const { sections } = siteData;
+const newsSection = sections?.news;
+
+let allNews = [];
+try {
+  allNews = await getCollection('news');
+  allNews = allNews.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+} catch (e) {
+  // Collection may not exist
+}
+---
+
+<BaseLayout title="News">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">News & Events</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {newsSection?.headline || 'News'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {newsSection?.subheadline || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Grid -->
+  <section class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      {allNews.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {allNews.map((article, index) => (
+            <article class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow reveal" style={`animation-delay: ${index * 0.05}s`}>
+              <a href={`/news/${article.slug}`}>
+                {article.data.image ? (
+                  <img 
+                    src={article.data.image}
+                    alt={article.data.title}
+                    class="w-full aspect-[4/3] object-cover group-hover:opacity-90 transition-opacity"
+                  />
+                ) : (
+                  <div class="w-full aspect-[4/3] bg-slate-200"></div>
+                )}
+                <div class="p-6">
+                  <p class="text-sm text-burgundy-600 mb-2">
+                    {new Date(article.data.date).toLocaleDateString('en-US', { 
+                      month: 'long', 
+                      day: 'numeric', 
+                      year: 'numeric' 
+                    })}
+                  </p>
+                  <h2 class="text-xl font-display text-charcoal-900 group-hover:text-burgundy-700 transition-colors">
+                    {article.data.title}
+                  </h2>
+                  {article.data.excerpt && (
+                    <p class="mt-2 text-charcoal-600 line-clamp-2">{article.data.excerpt}</p>
+                  )}
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <p class="text-charcoal-600">No news articles yet. Check back soon!</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

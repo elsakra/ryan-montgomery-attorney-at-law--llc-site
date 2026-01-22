@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteData from '../data/site.json';
+
+const { company, sections } = siteData;
+const contactSection = sections?.contact;
+---
+
+<BaseLayout title="Contact">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">Contact</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {contactSection?.headline || 'Contact'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {contactSection?.subheadline || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form and Info -->
+  <section class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20">
+        <!-- Contact Form -->
+        <div class="reveal">
+          <h2 class="section-headline text-2xl text-charcoal-900 mb-6">Send Us a Message</h2>
+          <form class="space-y-6">
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label for="firstName" class="block text-sm font-medium text-charcoal-700 mb-2">
+                  First Name *
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  required
+                  class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-charcoal-900 focus:border-burgundy-500 focus:ring-2 focus:ring-burgundy-200 outline-none transition-colors"
+                />
+              </div>
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-charcoal-700 mb-2">
+                  Last Name *
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  required
+                  class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-charcoal-900 focus:border-burgundy-500 focus:ring-2 focus:ring-burgundy-200 outline-none transition-colors"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <label for="email" class="block text-sm font-medium text-charcoal-700 mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-charcoal-900 focus:border-burgundy-500 focus:ring-2 focus:ring-burgundy-200 outline-none transition-colors"
+              />
+            </div>
+            
+            <div>
+              <label for="phone" class="block text-sm font-medium text-charcoal-700 mb-2">
+                Phone
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-charcoal-900 focus:border-burgundy-500 focus:ring-2 focus:ring-burgundy-200 outline-none transition-colors"
+              />
+            </div>
+            
+            <div>
+              <label for="interest" class="block text-sm font-medium text-charcoal-700 mb-2">
+                I'm interested in *
+              </label>
+              <select
+                id="interest"
+                name="interest"
+                required
+                class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-charcoal-900 focus:border-burgundy-500 focus:ring-2 focus:ring-burgundy-200 outline-none transition-colors"
+              >
+                <option value="">Select an option</option>
+                <option value="admissions">Admissions Information</option>
+                <option value="visit">Scheduling a Visit</option>
+                <option value="programs">Programs Information</option>
+                <option value="general">General Inquiry</option>
+              </select>
+            </div>
+            
+            <div>
+              <label for="message" class="block text-sm font-medium text-charcoal-700 mb-2">
+                Message *
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-charcoal-900 focus:border-burgundy-500 focus:ring-2 focus:ring-burgundy-200 outline-none transition-colors resize-none"
+              ></textarea>
+            </div>
+            
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center px-8 py-4 bg-burgundy-700 text-white font-semibold rounded-full hover:bg-burgundy-800 transition-colors"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
+        
+        <!-- Contact Information -->
+        <div class="reveal" style="animation-delay: 0.2s">
+          <h2 class="section-headline text-2xl text-charcoal-900 mb-6">Contact Information</h2>
+          
+          {contactSection?.offices?.map((office, index) => (
+            <div class={index > 0 ? "mt-8 pt-8 border-t border-slate-200" : ""}>
+              <h3 class="text-lg font-semibold text-charcoal-900">{office.name}</h3>
+              <div class="mt-3 space-y-2 text-charcoal-600">
+                <p>
+                  <a href={`tel:${office.phone}`} class="hover:text-burgundy-700 transition-colors">
+                    {office.phone}
+                  </a>
+                </p>
+                <p>
+                  <a href={`mailto:${office.email}`} class="hover:text-burgundy-700 transition-colors">
+                    {office.email}
+                  </a>
+                </p>
+                {office.hours && <p class="text-sm">{office.hours}</p>}
+              </div>
+            </div>
+          ))}
+          
+          <!-- Address -->
+          {(company.address?.street || company.address?.city) && (
+            <div class="mt-8 pt-8 border-t border-slate-200">
+              <h3 class="text-lg font-semibold text-charcoal-900">Campus Address</h3>
+              <div class="mt-3 text-charcoal-600">
+                {company.address?.street && <p>{company.address.street}</p>}
+                {(company.address?.city || company.address?.state) && (
+                  <p>
+                    {company.address?.city}{company.address?.city && company.address?.state && ', '}{company.address?.state} {company.address?.zip}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+          
+          <!-- Map Placeholder -->
+          <div class="mt-8 aspect-video bg-slate-200 rounded-xl">
+            <!-- Map would be embedded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteData from '../data/site.json';
+
+const { sections } = siteData;
+const campusLife = sections?.campusLife;
+---
+
+<BaseLayout title="Campus Life">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">Campus Life</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {campusLife?.headline || 'Campus Life'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {campusLife?.content || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  {campusLife?.features && campusLife.features.length > 0 && (
+    <section class="py-20 lg:py-32 bg-cream-50">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+          {campusLife.features.map((feature, index) => (
+            <div class="bg-white p-8 rounded-xl shadow-sm reveal" style={`animation-delay: ${index * 0.1}s`}>
+              <h3 class="text-xl font-display text-charcoal-900 mb-3">{feature.title}</h3>
+              <p class="text-charcoal-600">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Residential Life - Only shown if residential/boarding data exists -->
+  {campusLife?.residential && (
+    <section class="py-20 lg:py-32 bg-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div class="reveal">
+            <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">{campusLife.residential.label || 'Boarding'}</p>
+            <h2 class="section-headline text-display-lg text-charcoal-900">
+              {campusLife.residential.headline || 'A Home Away From Home'}
+            </h2>
+            <p class="mt-6 text-lg text-charcoal-600 leading-relaxed">
+              {campusLife.residential.content || ''}
+            </p>
+            {campusLife.residential.features && (
+              <ul class="mt-6 space-y-3">
+                {campusLife.residential.features.map((feature) => (
+                  <li class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-burgundy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-charcoal-600">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {campusLife.residential.image && (
+            <div class="reveal" style="animation-delay: 0.2s">
+              <img 
+                src={campusLife.residential.image}
+                alt={campusLife.residential.headline || 'Residential Life'}
+                class="w-full rounded-2xl shadow-xl"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Student Organizations - Only shown if organizations data exists -->
+  {campusLife?.organizations && campusLife.organizations.length > 0 && (
+    <section class="py-20 lg:py-32 bg-charcoal-900 text-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="text-center mb-12 reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-400 mb-4">Get Involved</p>
+          <h2 class="section-headline text-display-lg text-white">
+            {campusLife.organizationsHeadline || 'Clubs & Organizations'}
+          </h2>
+          <p class="mt-4 text-xl text-slate-300 max-w-2xl mx-auto">
+            {campusLife.organizationsContent || ''}
+          </p>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 reveal" style="animation-delay: 0.2s">
+          {campusLife.organizations.map((club) => (
+            <div class="p-4 border border-charcoal-700 rounded-lg text-center hover:border-burgundy-500 transition-colors">
+              <span class="text-white">{club}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Arts Section - Only shown if arts data exists -->
+  {campusLife?.arts && (
+    <section class="py-20 lg:py-32 bg-cream-50">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {campusLife.arts.image && (
+            <div class="order-2 lg:order-1 reveal" style="animation-delay: 0.2s">
+              <img 
+                src={campusLife.arts.image}
+                alt={campusLife.arts.headline || 'Arts Program'}
+                class="w-full rounded-2xl shadow-xl"
+              />
+            </div>
+          )}
+          <div class="order-1 lg:order-2 reveal">
+            <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">{campusLife.arts.label || 'The Arts'}</p>
+            <h2 class="section-headline text-display-lg text-charcoal-900">
+              {campusLife.arts.headline || 'Creativity & Expression'}
+            </h2>
+            <p class="mt-6 text-lg text-charcoal-600 leading-relaxed">
+              {campusLife.arts.content || ''}
+            </p>
+            {campusLife.arts.stats && (
+              <div class="mt-8 grid grid-cols-2 gap-4">
+                {campusLife.arts.stats.map((stat) => (
+                  <div>
+                    <div class="text-3xl font-display text-burgundy-700">{stat.value}</div>
+                    <p class="text-sm text-charcoal-600">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

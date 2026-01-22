@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteData from '../data/site.json';
+import { getCollection } from 'astro:content';
+
+const { company, sections, socialProof } = siteData;
+const about = sections?.about;
+
+let facultyMembers = [];
+try {
+  const allFaculty = await getCollection('faculty');
+  facultyMembers = allFaculty
+    .filter(f => f.data.featured)
+    .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+    .slice(0, 6);
+} catch (e) {
+  // Collection may not exist
+}
+---
+
+<BaseLayout title="About">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">About Us</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {about?.headline || 'About'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {about?.subheadline || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Our Story</p>
+          <h2 class="section-headline text-display-lg text-charcoal-900">
+            Since {company.founded}
+          </h2>
+          <div class="mt-6 text-lg text-charcoal-600 leading-relaxed space-y-4">
+            <p>{about?.content || ''}</p>
+            <p>Our commitment to academic excellence is matched only by our dedication to character development. We believe that true education prepares students not just for college, but for lives of meaning and purpose.</p>
+          </div>
+        </div>
+        {about?.image && (
+          <div class="reveal" style="animation-delay: 0.2s">
+            <img 
+              src={about.image}
+              alt={`${company.name} Campus`}
+              class="w-full rounded-2xl shadow-xl"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  {socialProof?.stats && (
+    <section class="py-16 lg:py-24 bg-burgundy-800">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          {socialProof.stats.map((stat, index) => (
+            <div class="text-center reveal" style={`animation-delay: ${index * 0.1}s`}>
+              <div class="text-4xl lg:text-5xl font-display text-white">{stat.value}</div>
+              <div class="mt-2 text-burgundy-200 text-sm uppercase tracking-wider">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Values Section -->
+  {sections.about.values && (
+    <section id="values" class="py-20 lg:py-32 bg-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="text-center mb-16 reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Our Values</p>
+          <h2 class="section-headline text-display-lg text-charcoal-900">
+            What We Stand For
+          </h2>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+          {sections.about.values.map((value, index) => (
+            <div class="flex gap-6 reveal" style={`animation-delay: ${index * 0.1}s`}>
+              <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-burgundy-100 text-burgundy-700 font-display text-xl">
+                {index + 1}
+              </div>
+              <div>
+                <h3 class="text-xl font-display text-charcoal-900 mb-2">{value.title}</h3>
+                <p class="text-charcoal-600">{value.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Leadership Section -->
+  <section id="leadership" class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="text-center mb-16 reveal">
+        <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Leadership</p>
+        <h2 class="section-headline text-display-lg text-charcoal-900">
+          Our Leadership Team
+        </h2>
+      </div>
+      
+      {facultyMembers.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {facultyMembers.map((member, index) => (
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm reveal" style={`animation-delay: ${index * 0.1}s`}>
+              <div class="aspect-[4/3] bg-slate-200">
+                {member.data.image && (
+                  <img 
+                    src={member.data.image}
+                    alt={member.data.name}
+                    class="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-display text-charcoal-900">{member.data.name}</h3>
+                <p class="text-burgundy-600">{member.data.title}</p>
+                {member.data.email && (
+                  <a href={`mailto:${member.data.email}`} class="mt-2 text-sm text-charcoal-500 hover:text-burgundy-600 transition-colors block">
+                    {member.data.email}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Placeholder leadership cards -->
+          <div class="bg-white rounded-xl overflow-hidden shadow-sm reveal">
+            <div class="aspect-[4/3] bg-slate-200"></div>
+            <div class="p-6">
+              <h3 class="text-xl font-display text-charcoal-900">Dr. Sarah Morrison</h3>
+              <p class="text-burgundy-600">Head of School</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden shadow-sm reveal" style="animation-delay: 0.1s">
+            <div class="aspect-[4/3] bg-slate-200"></div>
+            <div class="p-6">
+              <h3 class="text-xl font-display text-charcoal-900">James Chen</h3>
+              <p class="text-burgundy-600">Dean of Faculty</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden shadow-sm reveal" style="animation-delay: 0.2s">
+            <div class="aspect-[4/3] bg-slate-200"></div>
+            <div class="p-6">
+              <h3 class="text-xl font-display text-charcoal-900">Maria Rodriguez</h3>
+              <p class="text-burgundy-600">Director of Admissions</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Campus Section -->
+  <section id="campus" class="py-20 lg:py-32 bg-charcoal-900 text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl mx-auto text-center reveal">
+        <p class="text-sm uppercase tracking-widest text-burgundy-400 mb-4">Our Campus</p>
+        <h2 class="section-headline text-display-lg text-white">
+          200 Acres of Learning
+        </h2>
+        <p class="mt-6 text-xl text-slate-300">
+          Our historic campus provides an inspiring setting for academic discovery, artistic expression, and athletic achievement. From our Georgian-style academic buildings to our state-of-the-art science center, every space is designed to support student growth.
+        </p>
+        <div class="mt-8">
+          <a 
+            href="/campus-life" 
+            class="inline-flex items-center gap-2 px-6 py-3 border border-white text-white font-semibold rounded-full hover:bg-white hover:text-charcoal-900 transition-colors"
+          >
+            Explore Campus
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

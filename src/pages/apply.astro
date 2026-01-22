@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteData from '../data/site.json';
+
+const { sections } = siteData;
+const applySection = sections?.apply;
+---
+
+<BaseLayout title="Apply">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">Apply</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {applySection?.headline || 'Apply'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {applySection?.content || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Application Portal CTA -->
+  <section class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-3xl mx-auto px-6 lg:px-12 text-center">
+      <div class="reveal">
+        <h2 class="section-headline text-display-lg text-charcoal-900">
+          Start Your Application
+        </h2>
+        <p class="mt-6 text-lg text-charcoal-600">
+          Our online application portal guides you through each step of the process. You can save your progress and return at any time.
+        </p>
+        <div class="mt-8">
+          <a 
+            href={sections.apply?.portalUrl || "https://apply.heritageacademy.edu"}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 px-8 py-4 bg-burgundy-700 text-white font-semibold rounded-full hover:bg-burgundy-800 transition-colors"
+          >
+            Open Application Portal
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Application Checklist -->
+  <section class="py-20 lg:py-32 bg-white">
+    <div class="max-w-4xl mx-auto px-6 lg:px-12">
+      <div class="text-center mb-12 reveal">
+        <h2 class="section-headline text-display-lg text-charcoal-900">
+          Application Checklist
+        </h2>
+        <p class="mt-4 text-lg text-charcoal-600">
+          Make sure you have all the required materials before submitting your application.
+        </p>
+      </div>
+      
+      <div class="space-y-4">
+        {[
+          { item: 'Online Application Form', description: 'Complete all sections of the application' },
+          { item: 'Application Fee', description: '$75 (fee waivers available)' },
+          { item: 'School Transcripts', description: 'Official transcripts from current and previous schools' },
+          { item: 'Standardized Test Scores', description: 'SSAT or ISEE scores' },
+          { item: 'Teacher Recommendations', description: 'Two recommendations (English and Math teachers)' },
+          { item: 'Student Essay', description: 'Personal statement as described in the application' },
+          { item: 'Interview', description: 'On-campus or virtual interview (scheduled after application submission)' },
+        ].map((checklist, index) => (
+          <div class="flex items-start gap-4 p-4 bg-cream-50 rounded-lg reveal" style={`animation-delay: ${index * 0.05}s`}>
+            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded border-2 border-burgundy-600">
+              <svg class="w-4 h-4 text-burgundy-600 opacity-0 group-checked:opacity-100" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-semibold text-charcoal-900">{checklist.item}</h3>
+              <p class="text-sm text-charcoal-600 mt-0.5">{checklist.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-20 lg:py-32 bg-charcoal-900 text-white">
+    <div class="max-w-4xl mx-auto px-6 lg:px-12 text-center">
+      <div class="reveal">
+        <h2 class="section-headline text-display-lg text-white">
+          Questions?
+        </h2>
+        <p class="mt-6 text-xl text-slate-300">
+          Our admissions team is here to help you through every step of the process.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/contact"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-charcoal-900 font-semibold rounded-full hover:bg-cream-100 transition-colors"
+          >
+            Contact Admissions
+          </a>
+          <a 
+            href="/faq"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-white text-white font-semibold rounded-full hover:bg-white hover:text-charcoal-900 transition-colors"
+          >
+            View FAQs
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

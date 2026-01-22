@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteData from '../data/site.json';
+import { getCollection } from 'astro:content';
+
+const { company, sections } = siteData;
+
+let programs = [];
+try {
+  const allPrograms = await getCollection('programs');
+  programs = allPrograms.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+} catch (e) {
+  // Collection may not exist
+}
+---
+
+<BaseLayout title="Academics">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">Academics</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {sections.academics?.headline || 'Academics'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {sections.academics?.content || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Departments Grid -->
+  <section id="departments" class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="text-center mb-16 reveal">
+        <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Departments</p>
+        <h2 class="section-headline text-display-lg text-charcoal-900">
+          Academic Departments
+        </h2>
+      </div>
+      
+      {programs.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {programs.map((program, index) => (
+            <a 
+              href={`/academics/${program.slug}`}
+              class="group bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all reveal"
+              style={`animation-delay: ${index * 0.1}s`}
+            >
+              <h3 class="text-xl font-display text-charcoal-900 group-hover:text-burgundy-700 transition-colors">
+                {program.data.title}
+              </h3>
+              <p class="mt-2 text-charcoal-600">{program.data.description}</p>
+              <span class="mt-4 inline-flex items-center gap-2 text-burgundy-700 text-sm font-semibold group-hover:gap-3 transition-all">
+                Learn More
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {sections.academics?.departments?.map((dept, index) => (
+            <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow reveal" style={`animation-delay: ${index * 0.05}s`}>
+              <h3 class="text-lg font-display text-charcoal-900">{dept}</h3>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Teaching Approach - Only shown if approach data exists -->
+  {sections?.academics?.approach && (
+    <section class="py-20 lg:py-32 bg-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div class="reveal">
+            <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Our Approach</p>
+            <h2 class="section-headline text-display-lg text-charcoal-900">
+              {sections.academics.approach.headline || 'Our Teaching Philosophy'}
+            </h2>
+            <p class="mt-6 text-lg text-charcoal-600 leading-relaxed">
+              {sections.academics.approach.content || ''}
+            </p>
+          </div>
+          {sections.academics.approach.image && (
+            <div class="reveal" style="animation-delay: 0.2s">
+              <img 
+                src={sections.academics.approach.image}
+                alt={sections.academics.approach.headline || 'Our Approach'}
+                class="w-full rounded-2xl shadow-xl"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Faculty Section - Only shown if faculty stats exist -->
+  {sections?.academics?.faculty && (
+    <section id="faculty" class="py-20 lg:py-32 bg-charcoal-900 text-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="max-w-3xl mx-auto text-center reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-400 mb-4">Our Teachers</p>
+          <h2 class="section-headline text-display-lg text-white">
+            {sections.academics.faculty.headline || 'Dedicated Educators'}
+          </h2>
+          <p class="mt-6 text-xl text-slate-300">
+            {sections.academics.faculty.content || ''}
+          </p>
+          {sections.academics.faculty.stats && sections.academics.faculty.stats.length > 0 && (
+            <div class="mt-8 grid sm:grid-cols-3 gap-6">
+              {sections.academics.faculty.stats.map((stat) => (
+                <div class="text-center">
+                  <div class="text-4xl font-display text-white">{stat.value}</div>
+                  <p class="text-sm text-slate-400 mt-1">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- College/Next Steps Section - Only shown if college destinations exist -->
+  {siteData.socialProof?.collegeDestinations && siteData.socialProof.collegeDestinations.length > 0 && (
+    <section class="py-20 lg:py-32 bg-cream-50">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="text-center mb-12 reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Success Stories</p>
+          <h2 class="section-headline text-display-lg text-charcoal-900">
+            Where Our Graduates Go
+          </h2>
+          <p class="mt-4 text-lg text-charcoal-600 max-w-2xl mx-auto">
+            {company.name} graduates are well-prepared for their next steps.
+          </p>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-4 reveal" style="animation-delay: 0.2s">
+          {siteData.socialProof.collegeDestinations.map((college) => (
+            <span class="px-4 py-2 bg-white rounded-full text-charcoal-600 text-sm shadow-sm">
+              {college}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

@@ -1,0 +1,244 @@
+---
+import siteData from '../data/site.json';
+
+const { company, navigation, branding } = siteData;
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50">
+  <div class="px-6 lg:px-12 py-4 lg:py-6">
+    <div class="flex items-center justify-between">
+      <!-- Wordmark / Logo -->
+      <a href="/" class="wordmark text-white hover:opacity-80 transition-opacity">
+        {company.name.toUpperCase().split(' ').join('  ')}
+      </a>
+      
+      <!-- Right side: Search + Menu -->
+      <div class="flex items-center gap-4">
+        <!-- Search Button -->
+        <button
+          type="button"
+          class="p-2 text-white hover:opacity-80 transition-opacity"
+          aria-label="Search"
+          id="search-toggle"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </button>
+        
+        <!-- Hamburger Menu Button -->
+        <button
+          type="button"
+          class="p-2 text-white hover:opacity-80 transition-opacity"
+          aria-label="Open menu"
+          id="menu-toggle"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Full-screen Menu Overlay -->
+<div 
+  id="menu-overlay" 
+  class="fixed inset-0 z-[100] bg-burgundy-800 opacity-0 invisible transition-all duration-500"
+>
+  <div class="h-full flex flex-col">
+    <!-- Menu Header -->
+    <div class="px-6 lg:px-12 py-4 lg:py-6 flex items-center justify-between border-b border-burgundy-700">
+      <a href="/" class="wordmark text-white">
+        {company.name.toUpperCase().split(' ').join('  ')}
+      </a>
+      
+      <button
+        type="button"
+        class="p-2 text-white hover:opacity-80 transition-opacity"
+        aria-label="Close menu"
+        id="menu-close"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Menu Content -->
+    <div class="flex-1 overflow-y-auto px-6 lg:px-12 py-8 lg:py-12">
+      <nav class="grid lg:grid-cols-2 gap-8 lg:gap-16">
+        <!-- Main Navigation -->
+        <div class="space-y-6">
+          {navigation.items.map((item, index) => (
+            <div class="menu-item" style={`animation-delay: ${index * 0.05}s`}>
+              <a 
+                href={item.href}
+                class:list={[
+                  "block text-3xl lg:text-4xl font-display text-white hover:text-cream-200 transition-colors",
+                  currentPath === item.href && "text-cream-200"
+                ]}
+              >
+                {item.label}
+              </a>
+              {item.dropdown && (
+                <div class="mt-3 space-y-2 pl-1">
+                  {item.dropdown.map((subItem) => (
+                    <a
+                      href={subItem.href}
+                      class="block text-lg text-burgundy-200 hover:text-white transition-colors"
+                    >
+                      {subItem.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        
+        <!-- Secondary Navigation & Contact -->
+        <div class="lg:border-l lg:border-burgundy-700 lg:pl-16">
+          <!-- Secondary Nav -->
+          {navigation.secondaryNav && (
+            <div class="mb-8">
+              <p class="text-xs uppercase tracking-widest text-burgundy-300 mb-4">Quick Links</p>
+              <div class="space-y-3">
+                {navigation.secondaryNav.map((item) => (
+                  <a 
+                    href={item.href}
+                    class="block text-lg text-white hover:text-cream-200 transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          <!-- Contact Info -->
+          <div class="mb-8">
+            <p class="text-xs uppercase tracking-widest text-burgundy-300 mb-4">Contact</p>
+            <div class="space-y-2 text-white">
+              {company.address?.street && <p>{company.address.street}</p>}
+              {(company.address?.city || company.address?.state) && (
+                <p>
+                  {company.address?.city}{company.address?.city && company.address?.state && ', '}{company.address?.state} {company.address?.zip}
+                </p>
+              )}
+              {company.phone && (
+                <p class="mt-4">
+                  <a href={`tel:${company.phone}`} class="hover:text-cream-200 transition-colors">
+                    {company.phone}
+                  </a>
+                </p>
+              )}
+              {company.email && (
+                <p>
+                  <a href={`mailto:${company.email}`} class="hover:text-cream-200 transition-colors">
+                    {company.email}
+                  </a>
+                </p>
+              )}
+            </div>
+          </div>
+          
+          <!-- Apply CTA -->
+          {navigation.ctaButton && (
+            <a
+              href={navigation.ctaButton.href}
+              class="inline-flex items-center justify-center px-8 py-4 bg-white text-burgundy-800 font-semibold rounded-full hover:bg-cream-100 transition-colors"
+            >
+              {navigation.ctaButton.label}
+            </a>
+          )}
+        </div>
+      </nav>
+    </div>
+    
+    <!-- Social Links -->
+    <div class="px-6 lg:px-12 py-6 border-t border-burgundy-700">
+      <div class="flex items-center gap-6">
+        {siteData.footer.socialLinks?.instagram && (
+          <a href={siteData.footer.socialLinks.instagram} target="_blank" rel="noopener" class="text-burgundy-300 hover:text-white transition-colors">
+            <span class="sr-only">Instagram</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+            </svg>
+          </a>
+        )}
+        {siteData.footer.socialLinks?.facebook && (
+          <a href={siteData.footer.socialLinks.facebook} target="_blank" rel="noopener" class="text-burgundy-300 hover:text-white transition-colors">
+            <span class="sr-only">Facebook</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+        )}
+        {siteData.footer.socialLinks?.twitter && (
+          <a href={siteData.footer.socialLinks.twitter} target="_blank" rel="noopener" class="text-burgundy-300 hover:text-white transition-colors">
+            <span class="sr-only">Twitter</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+        )}
+        {siteData.footer.socialLinks?.youtube && (
+          <a href={siteData.footer.socialLinks.youtube} target="_blank" rel="noopener" class="text-burgundy-300 hover:text-white transition-colors">
+            <span class="sr-only">YouTube</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Menu overlay animation */
+  #menu-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  #menu-overlay .menu-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+  
+  #menu-overlay.open .menu-item {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuClose = document.getElementById('menu-close');
+  const menuOverlay = document.getElementById('menu-overlay');
+  
+  function openMenu() {
+    menuOverlay?.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeMenu() {
+    menuOverlay?.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  
+  menuToggle?.addEventListener('click', openMenu);
+  menuClose?.addEventListener('click', closeMenu);
+  
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuOverlay?.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+</script>

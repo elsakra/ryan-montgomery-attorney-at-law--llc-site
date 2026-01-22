@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteData from '../data/site.json';
+
+const { company, sections } = siteData;
+const admissions = sections?.admissions;
+---
+
+<BaseLayout title="Admissions">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">Admissions</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {admissions?.headline || 'Admissions'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {admissions?.content || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admissions Steps -->
+  {admissions?.steps && (
+    <section class="py-20 lg:py-32 bg-cream-50">
+      <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="text-center mb-16 reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">How to Apply</p>
+          <h2 class="section-headline text-display-lg text-charcoal-900">
+            Your Application Journey
+          </h2>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {admissions.steps.map((step, index) => (
+            <div class="relative reveal" style={`animation-delay: ${index * 0.1}s`}>
+              <div class="w-16 h-16 flex items-center justify-center rounded-full bg-burgundy-700 text-white font-display text-2xl mb-4">
+                {step.step}
+              </div>
+              <h3 class="text-xl font-display text-charcoal-900 mb-2">{step.title}</h3>
+              <p class="text-charcoal-600">{step.description}</p>
+              {index < admissions.steps.length - 1 && (
+                <div class="hidden lg:block absolute top-8 left-20 w-[calc(100%-2rem)] h-0.5 bg-burgundy-200"></div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Visit Campus -->
+  <section id="visit" class="py-20 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Visit Us</p>
+          <h2 class="section-headline text-display-lg text-charcoal-900">
+            Experience {company.name}
+          </h2>
+          <p class="mt-6 text-lg text-charcoal-600">
+            The best way to discover what makes {company.name} special is to visit our campus. We offer a variety of visit options throughout the year.
+          </p>
+          <div class="mt-8 space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-burgundy-100 text-burgundy-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-charcoal-900">Campus Tours</h3>
+                <p class="text-charcoal-600">Guided tours with current students, available weekdays during the school year.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-burgundy-100 text-burgundy-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-charcoal-900">Open Houses</h3>
+                <p class="text-charcoal-600">Join us for fall and spring open house events with panels and campus exploration.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full bg-burgundy-100 text-burgundy-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-semibold text-charcoal-900">Virtual Visits</h3>
+                <p class="text-charcoal-600">Can't visit in person? Explore our campus through virtual tours and online info sessions.</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8">
+            <a 
+              href="/contact"
+              class="inline-flex items-center gap-2 px-6 py-3 bg-burgundy-700 text-white font-semibold rounded-full hover:bg-burgundy-800 transition-colors"
+            >
+              Schedule a Visit
+            </a>
+          </div>
+        </div>
+        <div class="reveal" style="animation-delay: 0.2s">
+          <img 
+            src="/images/campus-visit.jpg"
+            alt="Campus Tour"
+            class="w-full rounded-2xl shadow-xl"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Important Dates -->
+  {admissions?.deadlines && (
+    <section class="py-20 lg:py-32 bg-charcoal-900 text-white">
+      <div class="max-w-4xl mx-auto px-6 lg:px-12">
+        <div class="text-center mb-12 reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-400 mb-4">Important Dates</p>
+          <h2 class="section-headline text-display-lg text-white">
+            Application Deadlines
+          </h2>
+        </div>
+        
+        <div class="space-y-6">
+          {admissions.deadlines.map((deadline, index) => (
+            <div class="flex items-center justify-between border-b border-charcoal-700 pb-6 reveal" style={`animation-delay: ${index * 0.1}s`}>
+              <div>
+                <h3 class="text-xl font-display text-white">{deadline.type}</h3>
+              </div>
+              <div class="text-burgundy-300 font-semibold">{deadline.date}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Financial Aid -->
+  <section id="financial-aid" class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl mx-auto text-center reveal">
+        <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Financial Aid</p>
+        <h2 class="section-headline text-display-lg text-charcoal-900">
+          Making {company.name} Accessible
+        </h2>
+        <p class="mt-6 text-lg text-charcoal-600">
+          We believe that financial circumstances should never be a barrier to a {company.name} education. We offer need-based financial aid to qualified families.
+        </p>
+        <div class="mt-8 grid sm:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-xl shadow-sm">
+            <div class="text-3xl font-display text-burgundy-700">40%</div>
+            <p class="text-sm text-charcoal-600 mt-1">of students receive aid</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm">
+            <div class="text-3xl font-display text-burgundy-700">$8M+</div>
+            <p class="text-sm text-charcoal-600 mt-1">awarded annually</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm">
+            <div class="text-3xl font-display text-burgundy-700">$42K</div>
+            <p class="text-sm text-charcoal-600 mt-1">average award</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Apply CTA -->
+  <section class="py-20 lg:py-32 bg-burgundy-800 text-white">
+    <div class="max-w-4xl mx-auto px-6 lg:px-12 text-center">
+      <div class="reveal">
+        <h2 class="section-headline text-display-lg text-white">
+          Ready to Apply?
+        </h2>
+        <p class="mt-6 text-xl text-burgundy-100">
+          Begin your application today and take the first step toward joining our community.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href={sections.apply?.portalUrl || "/apply"}
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-burgundy-800 font-semibold rounded-full hover:bg-cream-100 transition-colors"
+          >
+            Start Application
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a 
+            href="/contact"
+            class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-burgundy-800 transition-colors"
+          >
+            Contact Admissions
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

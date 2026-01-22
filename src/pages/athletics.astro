@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import siteData from '../data/site.json';
+import { getCollection } from 'astro:content';
+
+const { company, sections } = siteData;
+const athletics = sections?.athletics;
+
+let athleticsPrograms = [];
+try {
+  athleticsPrograms = await getCollection('athletics');
+} catch (e) {
+  // Collection may not exist
+}
+
+// Group by season
+const sportsBySeason = {
+  Fall: athleticsPrograms.filter(s => s.data.season === 'Fall'),
+  Winter: athleticsPrograms.filter(s => s.data.season === 'Winter'),
+  Spring: athleticsPrograms.filter(s => s.data.season === 'Spring'),
+};
+---
+
+<BaseLayout title="Athletics">
+  <!-- Hero Section -->
+  <section class="relative py-32 lg:py-48 bg-burgundy-800">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="max-w-3xl">
+        <p class="text-sm uppercase tracking-widest text-burgundy-200 mb-4">Athletics</p>
+        <h1 class="hero-headline text-display-xl text-white">
+          {athletics?.headline || 'Athletics'}
+        </h1>
+        <p class="mt-6 text-xl text-burgundy-100">
+          {athletics?.content || ''}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sports by Season -->
+  <section class="py-20 lg:py-32 bg-cream-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      {athletics?.seasons?.map((season, seasonIndex) => (
+        <div class={seasonIndex > 0 ? "mt-16 pt-16 border-t border-slate-200" : ""}>
+          <div class="text-center mb-12 reveal">
+            <h2 class="section-headline text-display-lg text-charcoal-900">
+              {season.name} Sports
+            </h2>
+          </div>
+          
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {season.sports.map((sport, index) => (
+              <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow reveal" style={`animation-delay: ${index * 0.05}s`}>
+                <h3 class="text-lg font-display text-charcoal-900">{sport}</h3>
+                <p class="text-sm text-burgundy-600 mt-1">Varsity & JV</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Facilities Section -->
+  <section id="facilities" class="py-20 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="reveal">
+          <p class="text-sm uppercase tracking-widest text-burgundy-600 mb-4">Facilities</p>
+          <h2 class="section-headline text-display-lg text-charcoal-900">
+            World-Class Facilities
+          </h2>
+          <p class="mt-6 text-lg text-charcoal-600 leading-relaxed">
+            Our athletic facilities rival those of small colleges, providing student-athletes with the resources they need to develop their skills and compete at the highest level.
+          </p>
+          <ul class="mt-6 space-y-3">
+            {['Olympic-size swimming pool', 'Indoor track and field house', '12 tennis courts', 'Ice hockey rink', 'Fitness center', 'Multiple playing fields'].map((facility) => (
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-burgundy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-charcoal-600">{facility}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="reveal" style="animation-delay: 0.2s">
+          <img 
+            src="/images/athletic-facilities.jpg"
+            alt="Athletic Facilities"
+            class="w-full rounded-2xl shadow-xl"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy Section -->
+  <section class="py-20 lg:py-32 bg-charcoal-900 text-white">
+    <div class="max-w-4xl mx-auto px-6 lg:px-12 text-center">
+      <div class="reveal">
+        <p class="text-sm uppercase tracking-widest text-burgundy-400 mb-4">Our Philosophy</p>
+        <h2 class="section-headline text-display-lg text-white">
+          Building Character Through Competition
+        </h2>
+        <p class="mt-6 text-xl text-slate-300">
+          Athletics at {company.name} is about more than winning. We believe that sports teach valuable life lessons—teamwork, perseverance, integrity, and grace in both victory and defeat.
+        </p>
+        <div class="mt-12 grid sm:grid-cols-3 gap-8">
+          <div>
+            <div class="text-4xl font-display text-white">30+</div>
+            <p class="text-sm text-slate-400 mt-1">Varsity teams</p>
+          </div>
+          <div>
+            <div class="text-4xl font-display text-white">85%</div>
+            <p class="text-sm text-slate-400 mt-1">Student participation</p>
+          </div>
+          <div>
+            <div class="text-4xl font-display text-white">25</div>
+            <p class="text-sm text-slate-400 mt-1">League championships (5 years)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

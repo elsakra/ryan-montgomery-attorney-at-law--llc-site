@@ -1,0 +1,38 @@
+{
+  "id": "prep-school-exeter",
+  "name": "Prep School (Exeter-style)",
+  "description": "Premium preparatory school template with full-bleed photography, editorial layout, and warm traditional aesthetic",
+  "industry": "education",
+  "tags": ["school", "academy", "education", "prep school", "boarding school", "college prep", "private school", "admissions"],
+  "sourceInspiration": "Phillips Exeter Academy (exeter.edu)",
+  "status": "approved",
+  "features": [
+    "Full-bleed hero photography",
+    "Minimal hamburger menu navigation",
+    "Editorial typography with serif headers",
+    "Admissions flow pages",
+    "Academic programs showcase",
+    "Campus life gallery",
+    "Athletics section",
+    "News and events"
+  ],
+  "pages": [
+    { "path": "/", "name": "Home" },
+    { "path": "/about", "name": "About" },
+    { "path": "/admissions", "name": "Admissions" },
+    { "path": "/academics", "name": "Academics" },
+    { "path": "/campus-life", "name": "Campus Life" },
+    { "path": "/athletics", "name": "Athletics" },
+    { "path": "/news", "name": "News" },
+    { "path": "/contact", "name": "Contact" },
+    { "path": "/apply", "name": "Apply" }
+  ],
+  "contentCollections": [
+    "programs",
+    "faculty",
+    "news",
+    "events",
+    "athletics",
+    "faq"
+  ]
+}
